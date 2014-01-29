@@ -127,6 +127,27 @@ x_Dist_Zilla:
       name: Bootstrap::lib
       version: 0.04000002
     -
+      class: Dist::Zilla::Plugin::Prereqs::Recommend::MatchInstalled
+      config:
+        Dist::Zilla::Plugin::Prereqs::Recommend::MatchInstalled:
+          applyto_map:
+            - 'build.requires = build.recommends'
+            - 'test.requires = test.recommends'
+            - 'runtime.requires = runtime.recommends'
+            - 'configure.requires = configure.recommends'
+            - 'develop.requires = develop.recommends'
+          applyto_phase:
+            - build
+            - test
+            - runtime
+            - configure
+            - develop
+          modules:
+            - Module::Build
+            - Test::More
+      name: Prereqs::Recommend::MatchInstalled
+      version: ~
+    -
       class: Dist::Zilla::Plugin::Git::NextVersion::Sanitized
       config:
         Dist::Zilla::Role::Version::Sanitize:
@@ -425,27 +446,6 @@ x_Dist_Zilla:
           type: requires
       name: '@Author::KENTNL/::Role::BundleDeps'
       version: 5.012
-    -
-      class: Dist::Zilla::Plugin::Prereqs::Recommend::MatchInstalled
-      config:
-        Dist::Zilla::Plugin::Prereqs::Recommend::MatchInstalled:
-          applyto_map:
-            - 'build.requires = build.recommends'
-            - 'test.requires = test.recommends'
-            - 'runtime.requires = runtime.recommends'
-            - 'configure.requires = configure.recommends'
-            - 'develop.requires = develop.recommends'
-          applyto_phase:
-            - build
-            - test
-            - runtime
-            - configure
-            - develop
-          modules:
-            - Module::Build
-            - Test::More
-      name: Prereqs::Recommend::MatchInstalled
-      version: ~
     -
       class: Dist::Zilla::Plugin::Prereqs
       config:
