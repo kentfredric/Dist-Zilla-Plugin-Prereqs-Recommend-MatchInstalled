@@ -49,7 +49,7 @@ Will get more recent things upgraded
 
 =cut
 
-use Moose;
+use Moose qw( with has around );
 use MooseX::Types::Moose qw( HashRef ArrayRef Str );
 with 'Dist::Zilla::Role::PrereqSource';
 
