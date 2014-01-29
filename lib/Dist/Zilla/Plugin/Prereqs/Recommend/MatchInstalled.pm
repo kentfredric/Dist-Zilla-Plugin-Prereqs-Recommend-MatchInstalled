@@ -175,7 +175,7 @@ has '_applyto_map_hash' => (
   is => ro =>,
   isa => ArrayRef [HashRef] =>,
   lazy    => 1,
-  builder => _build__apply_to_map_hash =>,
+  builder => _build__applyto_map_hash =>,
 );
 
 my $word  = qr/\p{PosixLower}+/msx;
