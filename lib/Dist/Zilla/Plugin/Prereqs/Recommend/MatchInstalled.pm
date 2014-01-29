@@ -295,8 +295,10 @@ sub _register_applyto_map_entry {
     }
 
     $self->log(
-      [ q[You asked for the installed version of %s, and it is a dependency but it is apparently not installed], $module ] );
+      [ q[You asked for the installed version of %s,] . q[ and it is a dependency but it is apparently not installed], $module, ],
+    );
   }
+  return $self;
 }
 
 sub register_prereqs {
