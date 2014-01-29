@@ -280,10 +280,12 @@ sub _register_applyto_map_entry {
   };
   if ( not exists $prereqs->{$phase} or not exists $prereqs->{$phase}->{$rel} ) {
       $self->log_debug(['Nothing in %s.%s', $phase, $rel ]);
+      return;
   }
   my $reqs = $prereqs->{$phase}->{$rel};
 
   for my $module ( keys %{$reqs} ) {
+    $self->log_debug(['Checking for upgrade on %s for %s.%s', $module, $phase, $rel ]);
     next unless $self->_user_wants_upgrade_on($module);
     my $latest = $self->current_version_of($module);
     if ( defined $latest ) {
