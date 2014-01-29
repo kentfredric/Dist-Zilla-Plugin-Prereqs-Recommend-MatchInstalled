@@ -576,7 +576,7 @@ allow_includes = 1
 # spell_command = aspell list
 
 # The words to not consider as misspelled.
-stop_words = metadata KiokuDB KENTNL KENTNL's CPAN blogged CPANized PluginBundles CPANID's CPANID dists DPCHRIST everyones irc cpan Doherty Gorwit namespace Gorwits blog PluginBundle Lesperance Ghedini Stauner Ilmari Vacklin Yanick Champoux Znamensky MinimumPerl Plugin minperl Alessandro ini
+stop_words = 
 
 # A file containing words to not consider as misspelled.
 # stop_words_file =
