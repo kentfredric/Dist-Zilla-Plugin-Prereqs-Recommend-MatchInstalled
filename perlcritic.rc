@@ -576,7 +576,7 @@ allow_includes = 1
 # spell_command = aspell list
 
 # The words to not consider as misspelled.
-stop_words = 
+stop_words = niché
 
 # A file containing words to not consider as misspelled.
 # stop_words_file =
