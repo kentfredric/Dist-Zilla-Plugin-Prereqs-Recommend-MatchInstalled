@@ -6,11 +6,11 @@ build_requires:
   ExtUtils::MakeMaker: 0
   File::Spec::Functions: 0
   List::Util: 0
-  Module::Build: 0.4204
-  Test::More: 1.001002
+  Module::Build: 0.3601
+  Test::More: 0.89
   version: 0
 configure_requires:
-  Module::Build: 0.4204
+  Module::Build: 0.3601
 dynamic_config: 0
 generated_by: 'Dist::Zilla version 5.012, CPAN::Meta::Converter version 2.133380'
 license: perl

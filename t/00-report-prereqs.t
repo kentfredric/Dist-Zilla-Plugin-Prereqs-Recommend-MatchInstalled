@@ -44,13 +44,19 @@ my %exclude = map {; $_ => 1 } qw(
 # Add static prereqs to the included modules list
 my $static_prereqs = do { my $x = {
        'build' => {
+                    'recommends' => {
+                                      'Module::Build' => '0.4204'
+                                    },
                     'requires' => {
-                                    'Module::Build' => '0.4204'
+                                    'Module::Build' => '0.3601'
                                   }
                   },
        'configure' => {
+                        'recommends' => {
+                                          'Module::Build' => '0.4204'
+                                        },
                         'requires' => {
-                                        'Module::Build' => '0.4204'
+                                        'Module::Build' => '0.3601'
                                       }
                       },
        'develop' => {
@@ -123,13 +129,14 @@ my $static_prereqs = do { my $x = {
        'test' => {
                    'recommends' => {
                                      'CPAN::Meta' => '0',
-                                     'CPAN::Meta::Requirements' => '2.120900'
+                                     'CPAN::Meta::Requirements' => '2.120900',
+                                     'Test::More' => '1.001002'
                                    },
                    'requires' => {
                                    'ExtUtils::MakeMaker' => '0',
                                    'File::Spec::Functions' => '0',
                                    'List::Util' => '0',
-                                   'Test::More' => '1.001002',
+                                   'Test::More' => '0.89',
                                    'version' => '0'
                                  }
                  }

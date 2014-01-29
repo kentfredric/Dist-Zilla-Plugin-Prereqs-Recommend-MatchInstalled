@@ -8,10 +8,10 @@ use Module::Build 0.3601;
 
 my %module_build_args = (
   "build_requires" => {
-    "Module::Build" => "0.4204"
+    "Module::Build" => "0.3601"
   },
   "configure_requires" => {
-    "Module::Build" => "0.4204"
+    "Module::Build" => "0.3601"
   },
   "dist_abstract" => "Advertise versions of things you have as soft dependencies",
   "dist_author" => [
@@ -38,7 +38,7 @@ my %module_build_args = (
     "ExtUtils::MakeMaker" => 0,
     "File::Spec::Functions" => 0,
     "List::Util" => 0,
-    "Test::More" => "1.001002",
+    "Test::More" => "0.89",
     "version" => 0
   }
 );
@@ -48,8 +48,8 @@ my %fallback_build_requires = (
   "ExtUtils::MakeMaker" => 0,
   "File::Spec::Functions" => 0,
   "List::Util" => 0,
-  "Module::Build" => "0.4204",
-  "Test::More" => "1.001002",
+  "Module::Build" => "0.3601",
+  "Test::More" => "0.89",
   "version" => 0
 );
 
