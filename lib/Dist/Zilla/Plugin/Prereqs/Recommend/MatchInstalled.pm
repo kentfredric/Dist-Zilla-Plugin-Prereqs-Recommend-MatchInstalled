@@ -312,6 +312,15 @@ sub register_prereqs {
   }
   return $prereqs;
 }
+
+=begin Pod::Coverage
+
+mvp_aliases mvp_multivalue_args register_prereqs
+
+=end Pod::Coverage
+
+=cut
+
 __PACKAGE__->meta->make_immutable;
 no Moose;
 
