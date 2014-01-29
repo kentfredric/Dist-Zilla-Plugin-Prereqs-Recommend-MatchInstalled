@@ -278,8 +278,9 @@ sub _register_applyto_map_entry {
     phase => $applyto->{target}->{phase},
     type  => $applyto->{target}->{rel},
   };
-  return if not exists $prereqs->{$phase};
-  return if not exists $prereqs->{$phase}->{$rel};
+  if ( not exists $prereqs->{$phase} or not exists $prereqs->{$phase}->{$rel} ) {
+      $self->log_debug(['Nothing in %s.%s', $phase, $rel ]);
+  }
   my $reqs = $prereqs->{$phase}->{$rel};
 
   for my $module ( keys %{$reqs} ) {
