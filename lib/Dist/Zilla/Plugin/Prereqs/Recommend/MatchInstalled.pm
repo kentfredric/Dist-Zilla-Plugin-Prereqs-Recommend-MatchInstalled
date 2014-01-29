@@ -243,9 +243,9 @@ sub _user_wants_upgrade_on {
 sub mvp_multivalue_args { return qw(applyto_map applyto_phase modules) }
 sub mvp_aliases { return { 'module' => 'modules' } }
 
-sub current_version_of {
-  my ( $self, $package ) = @_;
-  if ( $package eq 'perl' ) {
+sub _current_version_of {
+  my ( undef, $package ) = @_;
+  if ( 'perl' eq $package ) {
 
     # Thats not going to work, Dave.
     return $];
@@ -287,7 +287,7 @@ sub _register_applyto_map_entry {
 
   for my $module ( keys %{$reqs} ) {
     next unless $self->_user_wants_upgrade_on($module);
-    my $latest = $self->current_version_of($module);
+    my $latest = $self->_current_version_of($module);
     if ( defined $latest ) {
       $self->zilla->register_prereqs( $targetspec, $module, $latest );
       next;
