@@ -45,12 +45,12 @@ my %exclude = map {; $_ => 1 } qw(
 my $static_prereqs = do { my $x = {
        'build' => {
                     'requires' => {
-                                    'Module::Build' => '0.3601'
+                                    'Module::Build' => '0.4204'
                                   }
                   },
        'configure' => {
                         'requires' => {
-                                        'Module::Build' => '0.3601'
+                                        'Module::Build' => '0.4204'
                                       }
                       },
        'develop' => {
@@ -129,7 +129,7 @@ my $static_prereqs = do { my $x = {
                                    'ExtUtils::MakeMaker' => '0',
                                    'File::Spec::Functions' => '0',
                                    'List::Util' => '0',
-                                   'Test::More' => '0.89',
+                                   'Test::More' => '1.001002',
                                    'version' => '0'
                                  }
                  }

@@ -282,7 +282,7 @@ sub _register_applyto_map_entry {
       $self->log_debug(['Nothing in %s.%s', $phase, $rel ]);
       return;
   }
-  my $reqs = $prereqs->{$phase}->{$rel};
+  my $reqs = $prereqs->{$phase}->{$rel}->as_string_hash;
 
   for my $module ( keys %{$reqs} ) {
     $self->log_debug(['Checking for upgrade on %s for %s.%s', $module, $phase, $rel ]);
