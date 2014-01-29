@@ -177,6 +177,8 @@ has '_applyto_map_hash' => (
   builder => _build__applyto_map_hash =>,
 );
 
+# _Pulp__5010_qr_m_propagate_properly
+## no critic (Compatibility::PerlMinimumVersionAndWhy)
 my $word  = qr/\p{PosixLower}+/msx;
 my $combo = qr/${word}[.]${word}/msx;
 
@@ -242,7 +244,7 @@ sub mvp_multivalue_args { return qw(applyto_map applyto_phase modules) }
 sub mvp_aliases { return { 'module' => 'modules' } }
 
 sub current_version_of {
-  my ( $self, $package ) = @_;
+  my ( undef, $package ) = @_;
   if ( 'perl' eq $package ) {
 
     # Thats not going to work, Dave.
@@ -252,7 +254,7 @@ sub current_version_of {
   my $md = Module::Data->new($package);
   return if not $md;
   return if not -e $md->path;
-  return if not -f $md->path;
+  return if -d $md->path;
   return $md->_version_emulate;
 }
 
@@ -293,7 +295,7 @@ sub _register_applyto_map_entry {
     }
 
     $self->log(
-      [ q[You asked for the installed version of %s,] . q[ and it is a dependency but it is apparently not installed], $module ]
+      [ q[You asked for the installed version of %s,] . q[ and it is a dependency but it is apparently not installed], $module, ]
     );
   }
   return $self;
@@ -388,7 +390,7 @@ And those are the default values too.
     [Prereqs::Recommend::MatchInstalled]
     source_relation = requires
 
-This attribute specifies the prereqs to skim for modules to recommend upgrades on.
+This attribute specifies the prerequisites to skim for modules to recommend upgrades on.
 
 Valuable values are:
 

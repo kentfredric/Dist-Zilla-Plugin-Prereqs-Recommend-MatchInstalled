@@ -63,8 +63,8 @@ ATTRIBUTES
         [Prereqs::Recommend::MatchInstalled]
         source_relation = requires
 
-    This attribute specifies the prereqs to skim for modules to recommend
-    upgrades on.
+    This attribute specifies the prerequisites to skim for modules to
+    recommend upgrades on.
 
     Valuable values are:
 
