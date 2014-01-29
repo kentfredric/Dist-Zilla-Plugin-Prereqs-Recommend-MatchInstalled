@@ -1,12 +1,312 @@
+use 5.008;    # utf8
 use strict;
 use warnings;
+use utf8;
 
 package Dist::Zilla::Plugin::Prereqs::Recommend::MatchInstalled;
 
-# ABSTRACT:
+# ABSTRACT: Advertise versions of things you have as soft dependencies
+
+# AUTHORITY
+
+=head1 SYNOPIS
+
+C<[Prereqs::MatchInstalled]> was a good concept, but its application seemed too strong for some things.
+
+This is a variation on the same theme, but instead of upgrading dependencies in-place,
+it propagates the upgrade to a different relation, to produce a softer dependency map.
+
+Below shows the defaults expanded by hand.
+
+    [Prereqs::Recommend::MatchInstalled]
+    applyto_phase = configure
+    applyto_phase = runtime
+    applyto_phase = test
+    applyto_phase = build
+    applyto_phase = develop
+    source_relation = requires
+    target_relation = recommends
+
+And add these stanzas for example:
+
+    modules = Module::Build
+    modules = Moose
+
+And you have yourself a distribution that won't needlessly increase the dependencies
+on either, but will add increased dependencies to the C<recommends> phase.
+
+This way, people doing
+
+    cpanm YourModule
+
+Get only what they I<need>
+
+While
+
+    cpanm --with-recommends YourModule
+
+Will get more recent things upgraded
+
+=cut
 
 use Moose;
+use MooseX::Types::Moose qw( HashRef ArrayRef Str );
+with 'Dist::Zilla::Role::PrereqSource';
 
+=attr C<applyto_phase>
+
+    [Prereqs::Recommend::MatchInstalled]
+    applyto_phase = SOMEPHASE
+    applyto_phase = SOMEPHASE
+
+This attribute can be specified multiple times.
+
+Valuable values are:
+
+    build test runtime configure develop
+
+And those are the default values too.
+
+=cut
+
+has 'applyto_phase' => (
+  is => ro =>,
+  isa => ArrayRef [Str] =>,
+  lazy    => 1,
+  default => sub { [qw(build test runtime configure develop)] },
+);
+
+=attr C<source_relation>
+
+    [Prereqs::Recommend::MatchInstalled]
+    source_relation = requires
+
+This attribute specifies the prereqs to skim for modules to recommend upgrades on.
+
+Valuable values are:
+
+    requires recommends suggests
+
+Lastly:
+
+    conflicts
+
+Will probably do I<something>, but I have no idea if that means anything. If you want to conflict with what you've installed with, ... go right ahead.
+
+=cut
+
+has 'source_relation' => (
+  is      => ro  =>,
+  isa     => Str,
+  lazy    => 1,
+  default => sub { 'requires' },
+);
+
+=attr C<target_relation>
+
+    [Prereqs::Recommend::MatchInstalled]
+    target_relation = recommends
+
+This attribute specifies the relationship type to inject upgrades into.
+
+Valuable values are:
+
+    requires recommends suggests
+
+Lastly:
+
+    conflicts
+
+Will probably do I<something>, but I have no idea if that means anything. If you want to conflict with what you've installed
+with, ... go right ahead.
+
+=cut
+
+has 'target_relation' => (
+  is      => ro  =>,
+  isa     => Str =>,
+  lazy    => 1,
+  default => sub { 'recommends' },
+);
+
+=attr C<applyto_map>
+
+    [Prereqs::Recommend::MatchInstalled]
+    applyto_map = runtime.requires = runtime.recommends
+
+This attribute is the advanced internals of the other attributes, and it exists for insane, advanced, and niché applications.
+
+
+General format is:
+
+    applyto_map = <source_phase>.<source_relation> = <target_phase>.<target_relation>
+
+And you can probably do everything with this.
+
+You could also conceivably emulate C<[Prereqs::MatchInstalled]> in entirety by using this feature excessively.
+
+C<applyto_map> may be declared multiple times.
+
+=cut
+
+has 'applyto_map' => (
+  is => ro =>,
+  isa => ArrayRef [Str] =>,
+  lazy    => 1,
+  builder => _build_applyto_map =>,
+);
+
+sub _mk_phase_entry {
+  my ( $self, $phase ) = @_;
+  return sprintf q[%s.%s = %s.%s], $phase, $self->source_relation, $phase, $self->target_relation;
+}
+
+sub _build_applyto_map {
+  my ($self) = @_;
+  my @out;
+  for my $phase ( @{ $self->applyto_phase } ) {
+    push @out, $self->_mk_phase_entry($phase);
+  }
+  return \@out;
+}
+
+has '_applyto_map_hash' => (
+  is => ro =>,
+  isa => ArrayRef [HashRef] =>,
+  lazy    => 1,
+  builder => _build__applyto_map_hash =>,
+);
+
+my $word  = qr/\p{PosixLower}+/msx;
+my $combo = qr/${word}[.]${word}/msx;
+
+sub _parse_map_token {
+  my ( $self, $token ) = @_;
+  if ( $token !~ /\A(${word})[.](${word})/msx ) {
+    return $self->log_fatal( [ '%s is not in the form <phase.relation>', $token ] );
+  }
+  return {
+    phase    => $1,
+    relation => $2,
+  };
+
+}
+
+sub _parse_map_entry {
+  my ( $self, $entry ) = @_;
+  if ( $entry !~ /\A\s*($combo)\s*=\s*($combo)\s*\z/msx ) {
+    return $self->log_fatal( [ '%s is not a valid entry for applyto_map', $entry ] );
+  }
+  my ( $source, $target ) = ( $1, $2 );
+  return {
+    source => $self->_parse_map_token($source),
+    target => $self->_parse_map_token($target),
+  };
+
+}
+
+sub _build__applyto_map_hash {
+  my ($self) = @_;
+  my @out;
+  for my $line ( @{ $self->applyto_map } ) {
+    push @out, $self->_parse_map_entry($line);
+  }
+  return \@out;
+}
+
+has 'modules' => (
+  is => ro =>,
+  isa => ArrayRef [Str],
+  lazy    => 1,
+  default => sub { [] },
+);
+
+has _modules_hash => (
+  is      => ro                   =>,
+  isa     => HashRef,
+  lazy    => 1,
+  builder => _build__modules_hash =>,
+);
+
+sub _build__modules_hash {
+  my $self = shift;
+  return { map { ( $_, 1 ) } @{ $self->modules } };
+}
+
+sub _user_wants_upgrade_on {
+  my ( $self, $module ) = @_;
+  return exists $self->_modules_hash->{$module};
+}
+
+sub mvp_multivalue_args { return qw(applyto_map applyto_phase modules) }
+sub mvp_aliases { return { 'module' => 'modules' } }
+
+sub current_version_of {
+  my ( $self, $package ) = @_;
+  if ( $package eq 'perl' ) {
+
+    # Thats not going to work, Dave.
+    return $];
+  }
+  require Module::Data;
+  my $data = Module::Data->new($package);
+  return if not $data;
+  return if not -e -f $data->path;
+  return $data->_version_emulate;
+}
+
+around dump_config => sub {
+  my ( $orig, $self ) = @_;
+  my $config      = $self->$orig;
+  my $this_config = {
+    applyto_phase => $self->applyto_phase,
+    applyto_map   => $self->applyto_map,
+    modules       => $self->modules,
+  };
+  $config->{ q{} . __PACKAGE__ } = $this_config;
+  return $config;
+};
+
+sub _register_applyto_map_entry {
+  my ( $self, $applyto, $prereqs ) = @_;
+  my ( $phase, $rel );
+  $phase = $applyto->{source}->{phase};
+  $rel   = $applyto->{source}->{relation};
+  my $targetspec = {
+    phase => $applyto->{target}->{phase},
+    type  => $applyto->{target}->{relation},
+  };
+  $self->log_debug( [ 'Processing %s.%s => %s.%s', $phase, $rel, $applyto->{target}->{phase}, $applyto->{target}->{relation} ] );
+  if ( not exists $prereqs->{$phase} or not exists $prereqs->{$phase}->{$rel} ) {
+    $self->log_debug( [ 'Nothing in %s.%s', $phase, $rel ] );
+    return;
+  }
+  my $reqs = $prereqs->{$phase}->{$rel}->as_string_hash;
+
+  for my $module ( keys %{$reqs} ) {
+    next unless $self->_user_wants_upgrade_on($module);
+    my $latest = $self->current_version_of($module);
+    if ( defined $latest ) {
+      $self->zilla->register_prereqs( $targetspec, $module, $latest );
+      next;
+    }
+
+    $self->log(
+      [ q[You asked for the installed version of %s, and it is a dependency but it is apparently not installed], $module ] );
+  }
+}
+
+sub register_prereqs {
+  my ($self)  = @_;
+  my $zilla   = $self->zilla;
+  my $prereqs = $zilla->prereqs;
+  my $guts = $prereqs->cpan_meta_prereqs->{prereqs} || {};
+
+  for my $applyto ( @{ $self->_applyto_map_hash } ) {
+    $self->_register_applyto_map_entry( $applyto, $guts );
+  }
+  return $prereqs;
+}
 __PACKAGE__->meta->make_immutable;
 no Moose;
 
