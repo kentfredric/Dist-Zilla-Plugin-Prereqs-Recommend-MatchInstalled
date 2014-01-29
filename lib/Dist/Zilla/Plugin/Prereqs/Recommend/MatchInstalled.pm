@@ -9,7 +9,7 @@ package Dist::Zilla::Plugin::Prereqs::Recommend::MatchInstalled;
 
 # AUTHORITY
 
-=head1 SYNOPIS
+=head1 SYNOPSIS
 
 C<[Prereqs::MatchInstalled]> was a good concept, but its application seemed too strong for some things.
 
@@ -81,7 +81,7 @@ has 'applyto_phase' => (
     [Prereqs::Recommend::MatchInstalled]
     source_relation = requires
 
-This attribute specifies the prereqs to skim for modules to recommend upgrades on.
+This attribute specifies the prerequisites to skim for modules to recommend upgrades on.
 
 Valuable values are:
 
