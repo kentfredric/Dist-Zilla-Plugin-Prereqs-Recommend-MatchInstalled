@@ -1,0 +1,126 @@
+NAME
+    Dist::Zilla::Plugin::Prereqs::Recommend::MatchInstalled - Advertise
+    versions of things you have as soft dependencies
+
+VERSION
+    version 0.001000
+
+SYNOPSIS
+    "[Prereqs::MatchInstalled]" was a good concept, but its application
+    seemed too strong for some things.
+
+    This is a variation on the same theme, but instead of upgrading
+    dependencies in-place, it propagates the upgrade to a different
+    relation, to produce a softer dependency map.
+
+    Below shows the defaults expanded by hand.
+
+        [Prereqs::Recommend::MatchInstalled]
+        applyto_phase = configure
+        applyto_phase = runtime
+        applyto_phase = test
+        applyto_phase = build
+        applyto_phase = develop
+        source_relation = requires
+        target_relation = recommends
+
+    And add these stanzas for example:
+
+        modules = Module::Build
+        modules = Moose
+
+    And you have yourself a distribution that won't needlessly increase the
+    dependencies on either, but will add increased dependencies to the
+    "recommends" phase.
+
+    This way, people doing
+
+        cpanm YourModule
+
+    Get only what they *need*
+
+    While
+
+        cpanm --with-recommends YourModule
+
+    Will get more recent things upgraded
+
+ATTRIBUTES
+  "applyto_phase"
+        [Prereqs::Recommend::MatchInstalled]
+        applyto_phase = SOMEPHASE
+        applyto_phase = SOMEPHASE
+
+    This attribute can be specified multiple times.
+
+    Valuable values are:
+
+        build test runtime configure develop
+
+    And those are the default values too.
+
+  "source_relation"
+        [Prereqs::Recommend::MatchInstalled]
+        source_relation = requires
+
+    This attribute specifies the prerequisites to skim for modules to
+    recommend upgrades on.
+
+    Valuable values are:
+
+        requires recommends suggests
+
+    Lastly:
+
+        conflicts
+
+    Will probably do *something*, but I have no idea if that means anything.
+    If you want to conflict with what you've installed with, ... go right
+    ahead.
+
+  "target_relation"
+        [Prereqs::Recommend::MatchInstalled]
+        target_relation = recommends
+
+    This attribute specifies the relationship type to inject upgrades into.
+
+    Valuable values are:
+
+        requires recommends suggests
+
+    Lastly:
+
+        conflicts
+
+    Will probably do *something*, but I have no idea if that means anything.
+    If you want to conflict with what you've installed with, ... go right
+    ahead.
+
+  "applyto_map"
+        [Prereqs::Recommend::MatchInstalled]
+        applyto_map = runtime.requires = runtime.recommends
+
+    This attribute is the advanced internals of the other attributes, and it
+    exists for insane, advanced, and niché applications.
+
+    General format is:
+
+        applyto_map = <source_phase>.<source_relation> = <target_phase>.<target_relation>
+
+    And you can probably do everything with this.
+
+    You could also conceivably emulate "[Prereqs::MatchInstalled]" in
+    entirety by using this feature excessively.
+
+    "applyto_map" may be declared multiple times.
+
+AUTHOR
+    Kent Fredric <kentfredric@gmail.com>
+
+COPYRIGHT AND LICENSE
+    This software is copyright (c) 2014 by Kent Fredric
+    <kentfredric@gmail.com>.
+
+    This is free software; you can redistribute it and/or modify it under
+    the same terms as the Perl 5 programming language system itself.
+
