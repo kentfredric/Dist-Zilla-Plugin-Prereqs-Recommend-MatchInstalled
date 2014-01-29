@@ -182,27 +182,27 @@ my $combo = qr/${word}[.]${word}/msx;
 
 sub _parse_map_token {
   my ( $self, $token ) = @_;
-  if ( $token !~ /\A(${word})[.](${word})/msx ) {
-    return $self->log_fatal( [ '%s is not in the form <phase.relation>', $token ] );
+  my ( $phase, $relation );
+  if ( ( $phase, $relation ) = $token =~ /\A(${word})[.](${word})/msx ) {
+    return {
+      phase    => $phase,
+      relation => $relation,
+    };
   }
-  return {
-    phase    => $1,
-    relation => $2,
-  };
+  return $self->log_fatal( [ '%s is not in the form <phase.relation>', $token ] );
 
 }
 
 sub _parse_map_entry {
   my ( $self, $entry ) = @_;
-  if ( $entry !~ /\A\s*($combo)\s*=\s*($combo)\s*\z/msx ) {
-    return $self->log_fatal( [ '%s is not a valid entry for applyto_map', $entry ] );
+  my ( $source, $target );
+  if ( ( $source, $target ) = $entry =~ /\A\s*($combo)\s*=\s*($combo)\s*\z/msx ) {
+    return {
+      source => $self->_parse_map_token($source),
+      target => $self->_parse_map_token($target),
+    };
   }
-  my ( $source, $target ) = ( $1, $2 );
-  return {
-    source => $self->_parse_map_token($source),
-    target => $self->_parse_map_token($target),
-  };
-
+  return $self->log_fatal( [ '%s is not a valid entry for applyto_map', $entry ] );
 }
 
 sub _build__applyto_map_hash {
