@@ -49,7 +49,7 @@ our $AUTHORITY = 'cpan:KENTNL'; # AUTHORITY
 
 
 
-use Moose;
+use Moose qw( with has around );
 use MooseX::Types::Moose qw( HashRef ArrayRef Str );
 with 'Dist::Zilla::Role::PrereqSource';
 
@@ -182,27 +182,27 @@ my $combo = qr/${word}[.]${word}/msx;
 
 sub _parse_map_token {
   my ( $self, $token ) = @_;
-  if ( $token !~ /\A(${word})[.](${word})/msx ) {
-    return $self->log_fatal( [ '%s is not in the form <phase.relation>', $token ] );
+  my ( $phase, $relation );
+  if ( ( $phase, $relation ) = $token =~ /\A(${word})[.](${word})/msx ) {
+    return {
+      phase    => $phase,
+      relation => $relation,
+    };
   }
-  return {
-    phase    => $1,
-    relation => $2,
-  };
+  return $self->log_fatal( [ '%s is not in the form <phase.relation>', $token ] );
 
 }
 
 sub _parse_map_entry {
   my ( $self, $entry ) = @_;
-  if ( $entry !~ /\A\s*($combo)\s*=\s*($combo)\s*\z/msx ) {
-    return $self->log_fatal( [ '%s is not a valid entry for applyto_map', $entry ] );
+  my ( $source, $target );
+  if ( ( $source, $target ) = $entry =~ /\A\s*($combo)\s*=\s*($combo)\s*\z/msx ) {
+    return {
+      source => $self->_parse_map_token($source),
+      target => $self->_parse_map_token($target),
+    };
   }
-  my ( $source, $target ) = ( $1, $2 );
-  return {
-    source => $self->_parse_map_token($source),
-    target => $self->_parse_map_token($target),
-  };
-
+  return $self->log_fatal( [ '%s is not a valid entry for applyto_map', $entry ] );
 }
 
 sub _build__applyto_map_hash {
@@ -243,16 +243,17 @@ sub mvp_aliases { return { 'module' => 'modules' } }
 
 sub current_version_of {
   my ( $self, $package ) = @_;
-  if ( $package eq 'perl' ) {
+  if ( 'perl' eq $package ) {
 
     # Thats not going to work, Dave.
     return $];
   }
   require Module::Data;
-  my $data = Module::Data->new($package);
-  return if not $data;
-  return if not -e -f $data->path;
-  return $data->_version_emulate;
+  my $md = Module::Data->new($package);
+  return if not $md;
+  return if not -e $md->path;
+  return if not -f $md->path;
+  return $md->_version_emulate;
 }
 
 around dump_config => sub {
@@ -292,8 +293,10 @@ sub _register_applyto_map_entry {
     }
 
     $self->log(
-      [ q[You asked for the installed version of %s, and it is a dependency but it is apparently not installed], $module ] );
+      [ q[You asked for the installed version of %s,] . q[ and it is a dependency but it is apparently not installed], $module ]
+    );
   }
+  return $self;
 }
 
 sub register_prereqs {
@@ -325,6 +328,44 @@ Dist::Zilla::Plugin::Prereqs::Recommend::MatchInstalled - Advertise versions of 
 =head1 VERSION
 
 version 0.001000
+
+=head1 SYNOPSIS
+
+C<[Prereqs::MatchInstalled]> was a good concept, but its application seemed too strong for some things.
+
+This is a variation on the same theme, but instead of upgrading dependencies in-place,
+it propagates the upgrade to a different relation, to produce a softer dependency map.
+
+Below shows the defaults expanded by hand.
+
+    [Prereqs::Recommend::MatchInstalled]
+    applyto_phase = configure
+    applyto_phase = runtime
+    applyto_phase = test
+    applyto_phase = build
+    applyto_phase = develop
+    source_relation = requires
+    target_relation = recommends
+
+And add these stanzas for example:
+
+    modules = Module::Build
+    modules = Moose
+
+And you have yourself a distribution that won't needlessly increase the dependencies
+on either, but will add increased dependencies to the C<recommends> phase.
+
+This way, people doing
+
+    cpanm YourModule
+
+Get only what they I<need>
+
+While
+
+    cpanm --with-recommends YourModule
+
+Will get more recent things upgraded
 
 =head1 ATTRIBUTES
 
@@ -393,44 +434,6 @@ And you can probably do everything with this.
 You could also conceivably emulate C<[Prereqs::MatchInstalled]> in entirety by using this feature excessively.
 
 C<applyto_map> may be declared multiple times.
-
-=head1 SYNOPIS
-
-C<[Prereqs::MatchInstalled]> was a good concept, but its application seemed too strong for some things.
-
-This is a variation on the same theme, but instead of upgrading dependencies in-place,
-it propagates the upgrade to a different relation, to produce a softer dependency map.
-
-Below shows the defaults expanded by hand.
-
-    [Prereqs::Recommend::MatchInstalled]
-    applyto_phase = configure
-    applyto_phase = runtime
-    applyto_phase = test
-    applyto_phase = build
-    applyto_phase = develop
-    source_relation = requires
-    target_relation = recommends
-
-And add these stanzas for example:
-
-    modules = Module::Build
-    modules = Moose
-
-And you have yourself a distribution that won't needlessly increase the dependencies
-on either, but will add increased dependencies to the C<recommends> phase.
-
-This way, people doing
-
-    cpanm YourModule
-
-Get only what they I<need>
-
-While
-
-    cpanm --with-recommends YourModule
-
-Will get more recent things upgraded
 
 =head1 AUTHOR
 

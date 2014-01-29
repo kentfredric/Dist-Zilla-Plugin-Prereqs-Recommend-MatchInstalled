@@ -5,6 +5,46 @@ NAME
 VERSION
     version 0.001000
 
+SYNOPSIS
+    "[Prereqs::MatchInstalled]" was a good concept, but its application
+    seemed too strong for some things.
+
+    This is a variation on the same theme, but instead of upgrading
+    dependencies in-place, it propagates the upgrade to a different
+    relation, to produce a softer dependency map.
+
+    Below shows the defaults expanded by hand.
+
+        [Prereqs::Recommend::MatchInstalled]
+        applyto_phase = configure
+        applyto_phase = runtime
+        applyto_phase = test
+        applyto_phase = build
+        applyto_phase = develop
+        source_relation = requires
+        target_relation = recommends
+
+    And add these stanzas for example:
+
+        modules = Module::Build
+        modules = Moose
+
+    And you have yourself a distribution that won't needlessly increase the
+    dependencies on either, but will add increased dependencies to the
+    "recommends" phase.
+
+    This way, people doing
+
+        cpanm YourModule
+
+    Get only what they *need*
+
+    While
+
+        cpanm --with-recommends YourModule
+
+    Will get more recent things upgraded
+
 ATTRIBUTES
   "applyto_phase"
         [Prereqs::Recommend::MatchInstalled]
@@ -73,46 +113,6 @@ ATTRIBUTES
     entirety by using this feature excessively.
 
     "applyto_map" may be declared multiple times.
-
-SYNOPIS
-    "[Prereqs::MatchInstalled]" was a good concept, but its application
-    seemed too strong for some things.
-
-    This is a variation on the same theme, but instead of upgrading
-    dependencies in-place, it propagates the upgrade to a different
-    relation, to produce a softer dependency map.
-
-    Below shows the defaults expanded by hand.
-
-        [Prereqs::Recommend::MatchInstalled]
-        applyto_phase = configure
-        applyto_phase = runtime
-        applyto_phase = test
-        applyto_phase = build
-        applyto_phase = develop
-        source_relation = requires
-        target_relation = recommends
-
-    And add these stanzas for example:
-
-        modules = Module::Build
-        modules = Moose
-
-    And you have yourself a distribution that won't needlessly increase the
-    dependencies on either, but will add increased dependencies to the
-    "recommends" phase.
-
-    This way, people doing
-
-        cpanm YourModule
-
-    Get only what they *need*
-
-    While
-
-        cpanm --with-recommends YourModule
-
-    Will get more recent things upgraded
 
 AUTHOR
     Kent Fredric <kentfredric@gmail.com>
