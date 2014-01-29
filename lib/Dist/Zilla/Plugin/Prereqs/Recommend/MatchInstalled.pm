@@ -278,6 +278,10 @@ sub _register_applyto_map_entry {
     phase => $applyto->{target}->{phase},
     type  => $applyto->{target}->{rel},
   };
+  $self->log_debug([
+        'Processing %s.%s => %s.%s', $phase, $rel, $applyto->{target}->{phase},
+        $applyto->{target}->{rel}
+  ]);
   if ( not exists $prereqs->{$phase} or not exists $prereqs->{$phase}->{$rel} ) {
       $self->log_debug(['Nothing in %s.%s', $phase, $rel ]);
       return;
@@ -285,7 +289,7 @@ sub _register_applyto_map_entry {
   my $reqs = $prereqs->{$phase}->{$rel}->as_string_hash;
 
   for my $module ( keys %{$reqs} ) {
-    $self->log_debug(['Checking for upgrade on %s for %s.%s', $module, $phase, $rel ]);
+    $self->log_debug(['Checking for upgrade on %s from %s.%s', $module, $phase, $rel ]);
     next unless $self->_user_wants_upgrade_on($module);
     my $latest = $self->current_version_of($module);
     if ( defined $latest ) {
