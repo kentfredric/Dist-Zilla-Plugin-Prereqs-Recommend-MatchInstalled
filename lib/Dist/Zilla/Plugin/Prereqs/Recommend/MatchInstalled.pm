@@ -177,6 +177,8 @@ has '_applyto_map_hash' => (
   builder => _build__applyto_map_hash =>,
 );
 
+# _Pulp__5010_qr_m_propagate_properly
+## no critic (Compatibility::PerlMinimumVersionAndWhy)
 my $word  = qr/\p{PosixLower}+/msx;
 my $combo = qr/${word}[.]${word}/msx;
 
