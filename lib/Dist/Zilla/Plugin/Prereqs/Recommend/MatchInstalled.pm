@@ -243,7 +243,7 @@ sub _user_wants_upgrade_on {
 sub mvp_multivalue_args { return qw(applyto_map applyto_phase modules) }
 sub mvp_aliases { return { 'module' => 'modules' } }
 
-sub current_version_of {
+sub _current_version_of {
   my ( undef, $package ) = @_;
   if ( 'perl' eq $package ) {
 
@@ -288,14 +288,14 @@ sub _register_applyto_map_entry {
 
   for my $module ( keys %{$reqs} ) {
     next unless $self->_user_wants_upgrade_on($module);
-    my $latest = $self->current_version_of($module);
+    my $latest = $self->_current_version_of($module);
     if ( defined $latest ) {
       $self->zilla->register_prereqs( $targetspec, $module, $latest );
       next;
     }
 
     $self->log(
-      [ q[You asked for the installed version of %s,] . q[ and it is a dependency but it is apparently not installed], $module, ]
+      [ q[You asked for the installed version of %s,] . q[ and it is a dependency but it is apparently not installed], $module, ],
     );
   }
   return $self;
@@ -312,6 +312,15 @@ sub register_prereqs {
   }
   return $prereqs;
 }
+
+
+
+
+
+
+
+
+
 __PACKAGE__->meta->make_immutable;
 no Moose;
 
@@ -436,6 +445,8 @@ And you can probably do everything with this.
 You could also conceivably emulate C<[Prereqs::MatchInstalled]> in entirety by using this feature excessively.
 
 C<applyto_map> may be declared multiple times.
+
+=for Pod::Coverage mvp_aliases mvp_multivalue_args register_prereqs
 
 =head1 AUTHOR
 
