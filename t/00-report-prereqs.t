@@ -44,19 +44,13 @@ my %exclude = map {; $_ => 1 } qw(
 # Add static prereqs to the included modules list
 my $static_prereqs = do { my $x = {
        'build' => {
-                    'recommends' => {
-                                      'Module::Build' => '0.4204'
-                                    },
                     'requires' => {
-                                    'Module::Build' => '0.3601'
+                                    'Module::Build' => '0.4206'
                                   }
                   },
        'configure' => {
-                        'recommends' => {
-                                          'Module::Build' => '0.4204'
-                                        },
                         'requires' => {
-                                        'Module::Build' => '0.3601'
+                                        'Module::Build' => '0.4206'
                                       }
                       },
        'develop' => {
@@ -90,6 +84,7 @@ my $static_prereqs = do { my $x = {
                                       'Dist::Zilla::Plugin::PodWeaver' => '0',
                                       'Dist::Zilla::Plugin::Prereqs' => '0',
                                       'Dist::Zilla::Plugin::Prereqs::MatchInstalled' => '0',
+                                      'Dist::Zilla::Plugin::Prereqs::Recommend::MatchInstalled' => '0',
                                       'Dist::Zilla::Plugin::ReadmeAnyFromPod' => '0',
                                       'Dist::Zilla::Plugin::ReadmeFromPod' => '0',
                                       'Dist::Zilla::Plugin::RunExtraTests' => '0',
@@ -102,7 +97,6 @@ my $static_prereqs = do { my $x = {
                                       'Dist::Zilla::Plugin::TestRelease' => '0',
                                       'Dist::Zilla::Plugin::Twitter' => '0',
                                       'Dist::Zilla::Plugin::UploadToCPAN' => '0',
-                                      'Dist::Zilla::PluginBundle::Author::KENTNL' => 'v1.3.0',
                                       'Pod::Coverage::TrustPod' => '0',
                                       'Test::CPAN::Changes' => '0.19',
                                       'Test::CPAN::Meta' => '0',
@@ -111,7 +105,8 @@ my $static_prereqs = do { my $x = {
                                       'Test::Pod::Coverage' => '1.08'
                                     },
                       'suggests' => {
-                                      'Dist::Zilla::PluginBundle::Author::KENTNL::Lite' => 'v1.3.0'
+                                      'Dist::Zilla::App::Command::bakeini' => '0.001001',
+                                      'Dist::Zilla::PluginBundle::Author::KENTNL' => '2.016003'
                                     }
                     },
        'runtime' => {
@@ -129,14 +124,13 @@ my $static_prereqs = do { my $x = {
        'test' => {
                    'recommends' => {
                                      'CPAN::Meta' => '0',
-                                     'CPAN::Meta::Requirements' => '2.120900',
-                                     'Test::More' => '1.001002'
+                                     'CPAN::Meta::Requirements' => '2.120900'
                                    },
                    'requires' => {
                                    'ExtUtils::MakeMaker' => '0',
                                    'File::Spec::Functions' => '0',
                                    'List::Util' => '0',
-                                   'Test::More' => '0.89',
+                                   'Test::More' => '1.001003',
                                    'version' => '0'
                                  }
                  }
