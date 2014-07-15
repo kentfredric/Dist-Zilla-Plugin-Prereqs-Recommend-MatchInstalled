@@ -1,4 +1,12 @@
 This file contains changes in OPTIONAL dependencies for standard CPAN phases (configure/build/runtime/test)
 
 0.001001
+ [Removed / build recommends]
+ - Module::Build 0.4204
+
+ [Removed / configure recommends]
+ - Module::Build 0.4204
+
+ [Removed / test recommends]
+ - Test::More 1.001002
 
