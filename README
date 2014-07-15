@@ -3,7 +3,7 @@ NAME
     versions of things you have as soft dependencies
 
 VERSION
-    version 0.002000
+    version 0.002001
 
 SYNOPSIS
     "[Prereqs::MatchInstalled]" was a good concept, but its application
