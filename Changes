@@ -1,6 +1,8 @@
 Release history for Dist-Zilla-Plugin-Prereqs-Recommend-MatchInstalled
 
 {{$NEXT}}
+
+0.002000 2014-07-15T15:14:40Z
  [00 Major]
  - Various changes that may affect downstreams who work by hand.
  - Misc other packaging cleanups.
