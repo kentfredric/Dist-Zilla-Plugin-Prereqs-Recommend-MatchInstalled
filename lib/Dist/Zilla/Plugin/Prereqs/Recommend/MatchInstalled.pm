@@ -4,7 +4,9 @@ use warnings;
 use utf8;
 
 package Dist::Zilla::Plugin::Prereqs::Recommend::MatchInstalled;
-$Dist::Zilla::Plugin::Prereqs::Recommend::MatchInstalled::VERSION = '0.001000';
+
+our $VERSION = '0.002000';
+
 # ABSTRACT: Advertise versions of things you have as soft dependencies
 
 our $AUTHORITY = 'cpan:KENTNL'; # AUTHORITY
@@ -338,7 +340,7 @@ Dist::Zilla::Plugin::Prereqs::Recommend::MatchInstalled - Advertise versions of 
 
 =head1 VERSION
 
-version 0.001000
+version 0.002000
 
 =head1 SYNOPSIS
 

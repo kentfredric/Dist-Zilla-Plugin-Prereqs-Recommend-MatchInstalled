@@ -1,5 +1,21 @@
 Release history for Dist-Zilla-Plugin-Prereqs-Recommend-MatchInstalled
 
+0.002000 2014-07-15T15:14:40Z
+ [00 Major]
+ - Various changes that may affect downstreams who work by hand.
+ - Misc other packaging cleanups.
+
+ [01 Tooling Changes]
+ - Now uses EUMM instead of MB ( https://questhub.io/realm/perl/quest/5388cc12bbd0be5b2500011f )
+ - Dependencies on "latest" toolchain parts dropped from "requires" to "recommends"
+
+ [Dependencies::Stats]
+ - Dependencies changed since 0.001000, see misc/*.deps* for details
+ - build: -1 (recommends: -1)
+ - configure: +1 -1 (recommends: +1 -1)
+ - develop: +5 -5 (suggests: +2 -1)
+ - test: (recommends: +1 ↑1)
+
 0.001000 2014-01-29T19:05:59Z
  - First version.
 
