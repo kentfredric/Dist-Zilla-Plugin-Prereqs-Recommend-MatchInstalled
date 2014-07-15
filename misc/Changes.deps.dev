@@ -2,6 +2,7 @@ This file contains changes to DEVELOPMENT dependencies only ( both REQUIRED and 
 
 0.001001
  [Added / develop requires]
+ - Dist::Zilla::Plugin::MakeMaker
  - Dist::Zilla::Plugin::Prereqs::Recommend::MatchInstalled
 
  [Added / develop suggests]
@@ -9,6 +10,8 @@ This file contains changes to DEVELOPMENT dependencies only ( both REQUIRED and 
  - Dist::Zilla::PluginBundle::Author::KENTNL 2.016003
 
  [Removed / develop requires]
+ - Dist::Zilla::Plugin::ModuleBuild
+ - Dist::Zilla::Plugin::Prereqs::MatchInstalled
  - Dist::Zilla::PluginBundle::Author::KENTNL v1.3.0
 
  [Removed / develop suggests]
