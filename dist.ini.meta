@@ -17,6 +17,7 @@ mantissa          = 6
 twitter_hash_tags = #perl #cpan
 toolkit           = eumm
 toolkit_hardness  = soft
+bumpversions      = 1
 ; auto_prereqs_skip = File::Find
 
 [Prereqs]
