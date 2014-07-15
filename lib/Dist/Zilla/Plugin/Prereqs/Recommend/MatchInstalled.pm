@@ -340,7 +340,7 @@ Dist::Zilla::Plugin::Prereqs::Recommend::MatchInstalled - Advertise versions of 
 
 =head1 VERSION
 
-version 0.001001
+version 0.002000
 
 =head1 SYNOPSIS
 
