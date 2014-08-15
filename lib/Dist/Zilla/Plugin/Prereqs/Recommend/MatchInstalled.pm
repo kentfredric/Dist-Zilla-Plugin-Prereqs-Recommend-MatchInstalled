@@ -11,46 +11,6 @@ our $VERSION = '0.002001';
 
 # AUTHORITY
 
-=head1 SYNOPSIS
-
-C<[Prereqs::MatchInstalled]> was a good concept, but its application seemed too strong for some things.
-
-This is a variation on the same theme, but instead of upgrading dependencies in-place,
-it propagates the upgrade to a different relation, to produce a softer dependency map.
-
-Below shows the defaults expanded by hand.
-
-    [Prereqs::Recommend::MatchInstalled]
-    applyto_phase = configure
-    applyto_phase = runtime
-    applyto_phase = test
-    applyto_phase = build
-    applyto_phase = develop
-    source_relation = requires
-    target_relation = recommends
-
-And add these stanzas for example:
-
-    modules = Module::Build
-    modules = Moose
-
-And you have yourself a distribution that won't needlessly increase the dependencies
-on either, but will add increased dependencies to the C<recommends> phase.
-
-This way, people doing
-
-    cpanm YourModule
-
-Get only what they I<need>
-
-While
-
-    cpanm --with-recommends YourModule
-
-Will get more recent things upgraded
-
-=cut
-
 use Moose qw( with has around );
 use MooseX::Types::Moose qw( HashRef ArrayRef Str );
 with 'Dist::Zilla::Role::PrereqSource';
@@ -327,3 +287,43 @@ __PACKAGE__->meta->make_immutable;
 no Moose;
 
 1;
+
+=head1 SYNOPSIS
+
+C<[Prereqs::MatchInstalled]> was a good concept, but its application seemed too strong for some things.
+
+This is a variation on the same theme, but instead of upgrading dependencies in-place,
+it propagates the upgrade to a different relation, to produce a softer dependency map.
+
+Below shows the defaults expanded by hand.
+
+    [Prereqs::Recommend::MatchInstalled]
+    applyto_phase = configure
+    applyto_phase = runtime
+    applyto_phase = test
+    applyto_phase = build
+    applyto_phase = develop
+    source_relation = requires
+    target_relation = recommends
+
+And add these stanzas for example:
+
+    modules = Module::Build
+    modules = Moose
+
+And you have yourself a distribution that won't needlessly increase the dependencies
+on either, but will add increased dependencies to the C<recommends> phase.
+
+This way, people doing
+
+    cpanm YourModule
+
+Get only what they I<need>
+
+While
+
+    cpanm --with-recommends YourModule
+
+Will get more recent things upgraded
+
+=cut
