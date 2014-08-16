@@ -5,51 +5,11 @@ use utf8;
 
 package Dist::Zilla::Plugin::Prereqs::Recommend::MatchInstalled;
 
-our $VERSION = '0.002000';
+our $VERSION = '0.002001';
 
 # ABSTRACT: Advertise versions of things you have as soft dependencies
 
 our $AUTHORITY = 'cpan:KENTNL'; # AUTHORITY
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 use Moose qw( with has around );
 use MooseX::Types::Moose qw( HashRef ArrayRef Str );
@@ -340,7 +300,7 @@ Dist::Zilla::Plugin::Prereqs::Recommend::MatchInstalled - Advertise versions of 
 
 =head1 VERSION
 
-version 0.002000
+version 0.002001
 
 =head1 SYNOPSIS
 
