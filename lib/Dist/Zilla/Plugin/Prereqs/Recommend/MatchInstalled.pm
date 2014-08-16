@@ -5,7 +5,7 @@ use utf8;
 
 package Dist::Zilla::Plugin::Prereqs::Recommend::MatchInstalled;
 
-our $VERSION = '0.002001';
+our $VERSION = '0.002002';
 
 # ABSTRACT: Advertise versions of things you have as soft dependencies
 
@@ -300,7 +300,7 @@ Dist::Zilla::Plugin::Prereqs::Recommend::MatchInstalled - Advertise versions of 
 
 =head1 VERSION
 
-version 0.002001
+version 0.002002
 
 =head1 SYNOPSIS
 
