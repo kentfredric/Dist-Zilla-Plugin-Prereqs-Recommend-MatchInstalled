@@ -1,6 +1,8 @@
 Release history for Dist-Zilla-Plugin-Prereqs-Recommend-MatchInstalled
 
 {{$NEXT}}
+
+0.003000 2014-09-08T22:54:04Z
  [00 Minor]
  - Internals changed.
  - Tests added.
