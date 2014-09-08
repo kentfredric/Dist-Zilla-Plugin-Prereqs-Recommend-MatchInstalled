@@ -5,7 +5,7 @@ use utf8;
 
 package Dist::Zilla::Plugin::Prereqs::Recommend::MatchInstalled;
 
-our $VERSION = '0.002001';
+our $VERSION = '0.003000';
 
 # ABSTRACT: Advertise versions of things you have as soft dependencies
 
@@ -13,6 +13,7 @@ our $AUTHORITY = 'cpan:KENTNL'; # AUTHORITY
 
 use Moose qw( with has around );
 use MooseX::Types::Moose qw( HashRef ArrayRef Str );
+use Dist::Zilla::Util::ConfigDumper qw( config_dumper );
 with 'Dist::Zilla::Role::PrereqSource';
 
 
@@ -220,17 +221,7 @@ sub _current_version_of {
   return $md->_version_emulate;
 }
 
-around dump_config => sub {
-  my ( $orig, $self ) = @_;
-  my $config      = $self->$orig;
-  my $this_config = {
-    applyto_phase => $self->applyto_phase,
-    applyto_map   => $self->applyto_map,
-    modules       => $self->modules,
-  };
-  $config->{ q{} . __PACKAGE__ } = $this_config;
-  return $config;
-};
+around dump_config => config_dumper( __PACKAGE__, qw( applyto_phase applyto_map modules source_relation target_relation ) );
 
 sub _register_applyto_map_entry {
   my ( $self, $applyto, $prereqs ) = @_;
@@ -300,7 +291,7 @@ Dist::Zilla::Plugin::Prereqs::Recommend::MatchInstalled - Advertise versions of 
 
 =head1 VERSION
 
-version 0.002001
+version 0.003000
 
 =head1 SYNOPSIS
 
@@ -412,7 +403,7 @@ C<applyto_map> may be declared multiple times.
 
 =head1 AUTHOR
 
-Kent Fredric <kentfredric@gmail.com>
+Kent Fredric <kentnl@cpan.org>
 
 =head1 COPYRIGHT AND LICENSE
 
