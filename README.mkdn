@@ -114,7 +114,7 @@ You could also conceivably emulate `[Prereqs::MatchInstalled]` in entirety by us
 
 # AUTHOR
 
-Kent Fredric <kentfredric@gmail.com>
+Kent Fredric <kentnl@cpan.org>
 
 # COPYRIGHT AND LICENSE
 
