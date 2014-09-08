@@ -8,7 +8,7 @@ This file contains ALL changes in dependencies in both REQUIRED / OPTIONAL depen
  - Dist::Zilla::Util::ConfigDumper
 
  [Added / test requires]
- - Dist::Zilla::Util::Test::KENTNL 1.003001
+ - Dist::Zilla::Util::Test::KENTNL 1.003002
  - Module::Metadata
  - Test::DZil
  - Test::Fatal
