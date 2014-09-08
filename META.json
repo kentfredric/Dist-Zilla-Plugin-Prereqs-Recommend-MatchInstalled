@@ -100,7 +100,7 @@
             "Test::More" : "1.001006"
          },
          "requires" : {
-            "Dist::Zilla::Util::Test::KENTNL" : "1.003001",
+            "Dist::Zilla::Util::Test::KENTNL" : "1.003002",
             "ExtUtils::MakeMaker" : "0",
             "File::Spec" : "0",
             "Module::Metadata" : "0",

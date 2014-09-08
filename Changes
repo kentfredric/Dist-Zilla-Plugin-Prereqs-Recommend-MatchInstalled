@@ -8,7 +8,7 @@ Release history for Dist-Zilla-Plugin-Prereqs-Recommend-MatchInstalled
  - Dependencies changed since 0.002001, see misc/*.deps* for details
  - develop: +1 ↑1 (suggests: ↑2)
  - runtime: +1
- - test: (recommends: ↑1)
+ - test: +4 (recommends: ↑1)
 
  [Internals]
  - use ConfigDumper for dump_config
