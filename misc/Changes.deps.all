@@ -7,6 +7,12 @@ This file contains ALL changes in dependencies in both REQUIRED / OPTIONAL depen
  [Added / runtime requires]
  - Dist::Zilla::Util::ConfigDumper
 
+ [Added / test requires]
+ - Dist::Zilla::Util::Test::KENTNL 1.003002
+ - Module::Metadata
+ - Test::DZil
+ - Test::Fatal
+
  [Changed / develop requires]
  - Test::Kwalitee 1.12 → 1.21
 
