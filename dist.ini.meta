@@ -10,8 +10,7 @@ try_built = 1
 
 
 [@Author::KENTNL]
-:version          = 2.016
-git_versions      = 1
+:version          = 2.020
 normal_form       = numify
 mantissa          = 6
 twitter_hash_tags = #perl #cpan
