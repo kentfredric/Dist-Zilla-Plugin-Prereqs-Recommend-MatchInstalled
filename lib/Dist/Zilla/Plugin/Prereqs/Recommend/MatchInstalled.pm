@@ -5,7 +5,7 @@ use utf8;
 
 package Dist::Zilla::Plugin::Prereqs::Recommend::MatchInstalled;
 
-our $VERSION = '0.003000';
+our $VERSION = '0.003001';
 
 # ABSTRACT: Advertise versions of things you have as soft dependencies
 
@@ -142,13 +142,15 @@ has '_applyto_map_hash' => (
 
 # _Pulp__5010_qr_m_propagate_properly
 ## no critic (Compatibility::PerlMinimumVersionAndWhy)
-my $word  = qr/\p{PosixLower}+/msx;
-my $combo = qr/${word}[.]${word}/msx;
+my $re_phase    = qr/configure|build|runtime|test|develop/msx;
+my $re_relation = qr/requires|recommends|suggests|conflicts/msx;
+
+my $combo = qr/(?:$re_phase)[.](?:$re_relation)/msx;
 
 sub _parse_map_token {
   my ( $self, $token ) = @_;
   my ( $phase, $relation );
-  if ( ( $phase, $relation ) = $token =~ /\A(${word})[.](${word})/msx ) {
+  if ( ( $phase, $relation ) = $token =~ /\A($re_phase)[.]($re_relation)/msx ) {
     return {
       phase    => $phase,
       relation => $relation,
@@ -291,7 +293,7 @@ Dist::Zilla::Plugin::Prereqs::Recommend::MatchInstalled - Advertise versions of 
 
 =head1 VERSION
 
-version 0.003000
+version 0.003001
 
 =head1 SYNOPSIS
 

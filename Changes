@@ -1,5 +1,9 @@
 Release history for Dist-Zilla-Plugin-Prereqs-Recommend-MatchInstalled
 
+0.003001 2014-09-09T14:16:46Z
+ [Bugfix]
+ - Fix PosixLower not being a thing before 5.10.1
+
 0.003000 2014-09-08T22:54:04Z
  [00 Minor]
  - Internals changed.
