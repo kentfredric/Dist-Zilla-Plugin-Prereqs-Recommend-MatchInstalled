@@ -1,5 +1,7 @@
 Release history for Dist-Zilla-Plugin-Prereqs-Recommend-MatchInstalled
 
+0.003003 2017-03-04T00:45:00Z 85abc15
+
 0.003002 2017-03-04T00:30:27Z 63b29b7
  [Bugfix]
  - Avoid test failures on 5.26 w/ -Ddefault_inc_excludes_dot
