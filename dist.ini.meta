@@ -20,6 +20,8 @@ bumpversions      = 1
 copyfiles         = LICENSE
 srcreadme         = mkdn
 ; auto_prereqs_skip = File::Find
+Test::Compile::PerFile.:version = 0.003902
+Test::Compile::PerFile.test_template = 02-raw-require.t.tpl
 
 [Prereqs]
 
