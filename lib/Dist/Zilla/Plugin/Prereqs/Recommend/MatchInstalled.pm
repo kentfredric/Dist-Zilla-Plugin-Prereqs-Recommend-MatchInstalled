@@ -1,11 +1,10 @@
-use 5.008;    # utf8
+use 5.006;    # our
 use strict;
 use warnings;
-use utf8;
 
 package Dist::Zilla::Plugin::Prereqs::Recommend::MatchInstalled;
 
-our $VERSION = '0.003002';
+our $VERSION = '0.003003';
 
 # ABSTRACT: Advertise versions of things you have as soft dependencies
 
@@ -13,7 +12,6 @@ our $AUTHORITY = 'cpan:KENTNL'; # AUTHORITY
 
 use Moose qw( with has around );
 use MooseX::Types::Moose qw( HashRef ArrayRef Str );
-use Dist::Zilla::Util::ConfigDumper qw( config_dumper );
 with 'Dist::Zilla::Role::PrereqSource';
 
 
@@ -223,7 +221,22 @@ sub _current_version_of {
   return $md->_version_emulate;
 }
 
-around dump_config => config_dumper( __PACKAGE__, qw( applyto_phase applyto_map modules source_relation target_relation ) );
+around dump_config => sub {
+  my ( $orig, $self, @args ) = @_;
+  my $config    = $self->$orig(@args);
+  my $localconf = {};
+  $localconf->{applyto_phase}   = $self->applyto_phase;
+  $localconf->{applyto_map}     = $self->applyto_map;
+  $localconf->{modules}         = $self->modules;
+  $localconf->{source_relation} = $self->source_relation;
+  $localconf->{target_relation} = $self->target_relation;
+  $localconf->{ q[$] . __PACKAGE__ . '::VERSION' } = $VERSION unless __PACKAGE__ eq ref $self;
+  $config->{ +__PACKAGE__ } = $localconf;
+  return $config;
+};
+
+__PACKAGE__->meta->make_immutable;
+no Moose;
 
 sub _register_applyto_map_entry {
   my ( $self, $applyto, $prereqs ) = @_;
@@ -268,17 +281,6 @@ sub register_prereqs {
   return $prereqs;
 }
 
-
-
-
-
-
-
-
-
-__PACKAGE__->meta->make_immutable;
-no Moose;
-
 1;
 
 __END__
@@ -293,7 +295,7 @@ Dist::Zilla::Plugin::Prereqs::Recommend::MatchInstalled - Advertise versions of 
 
 =head1 VERSION
 
-version 0.003002
+version 0.003003
 
 =head1 SYNOPSIS
 
@@ -332,6 +334,19 @@ While
     cpanm --with-recommends YourModule
 
 Will get more recent things upgraded
+
+=head1 DESCRIPTION
+
+The C<[Prereqs::Recommend::MatchInstalled]> is a tool for authors who wish to
+keep end users informed of which versions of critical dependencies the author
+has themselves used, as an encouragement for the users to consume at least that
+version, but without making it a hard requirement.
+
+In practice this can be used for anything, but this modules author currently
+recommends you restrict this approach only to development dependencies,
+I<mostly> because even a system of auto-recommendation is still too aggressive
+for most modules, or if you insist this concept on C<CPAN>, use something with
+"but not larger than" mechanics like C<[Prereqs::Upgrade]>
 
 =head1 ATTRIBUTES
 

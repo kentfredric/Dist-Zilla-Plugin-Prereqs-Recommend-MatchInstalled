@@ -1,28 +1,23 @@
 use strict;
 use warnings;
 
-use Test::More;
-use Test::DZil qw( simple_ini );
-use Dist::Zilla::Util::Test::KENTNL 1.003002 qw( dztest );
+use Test::More tests => 2;
+use Test::DZil qw( simple_ini Builder );
+
 use Module::Metadata;
 use Test::Fatal;
 
-my $test = dztest();
-$test->add_file(
-  'dist.ini',
-  simple_ini(
-    [ 'Prereqs' => { 'Test::More' => 0 } ],
-    [ 'Prereqs::Recommend::MatchInstalled', { module => ['Test::More'] } ],
-    ['MetaConfig'],
-  )
+my $files = {};
+$files->{'source/dist.ini'} = simple_ini(
+  [ 'Prereqs' => { 'Test::More' => 0 } ],
+  [ 'Prereqs::Recommend::MatchInstalled', { module => ['Test::More'] } ],
+  ['MetaConfig'],
 );
-
-$test->build_ok;
+my $test = Builder->from_config( { dist_root => 'invalid' }, { add_files => $files } );
+$test->chrome->logger->set_debug(1);
+$test->build;
+pass("Builds ok");
 
 my $v = Module::Metadata->new_from_module('Test::More');
-
-$test->meta_path_deeply( '/prereqs/runtime/recommends', [ { 'Test::More' => $v->version('Test::More')->stringify } ], );
-note explain $test->builder->log_messages;
-
-done_testing;
-
+is_deeply( $test->distmeta->{prereqs}->{runtime}->{recommends}, { 'Test::More' => $v->version('Test::More')->stringify }, );
+note explain $test->log_messages;
