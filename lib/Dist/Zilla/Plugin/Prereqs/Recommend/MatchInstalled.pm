@@ -12,7 +12,6 @@ our $VERSION = '0.003003';
 
 use Moose qw( with has around );
 use MooseX::Types::Moose qw( HashRef ArrayRef Str );
-use Dist::Zilla::Util::ConfigDumper qw( config_dumper );
 with 'Dist::Zilla::Role::PrereqSource';
 
 =attr C<applyto_phase>
@@ -222,7 +221,19 @@ sub _current_version_of {
   return $md->_version_emulate;
 }
 
-around dump_config => config_dumper( __PACKAGE__, qw( applyto_phase applyto_map modules source_relation target_relation ) );
+around dump_config => sub {
+  my ( $orig, $self, @args ) = @_;
+  my $config    = $self->$orig(@args);
+  my $localconf = {};
+  $localconf->{applyto_phase}   = $self->applyto_phase;
+  $localconf->{applyto_map}     = $self->applyto_map;
+  $localconf->{modules}         = $self->modules;
+  $localconf->{source_relation} = $self->source_relation;
+  $localconf->{target_relation} = $self->target_relation;
+  $localconf->{ q[$] . __PACKAGE__ . '::VERSION' } = $VERSION unless __PACKAGE__ eq ref $self;
+  $config->{ +__PACKAGE__ } = $localconf;
+  return $config;
+};
 
 __PACKAGE__->meta->make_immutable;
 no Moose;
