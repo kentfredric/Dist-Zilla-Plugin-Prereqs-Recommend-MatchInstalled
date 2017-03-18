@@ -224,6 +224,9 @@ sub _current_version_of {
 
 around dump_config => config_dumper( __PACKAGE__, qw( applyto_phase applyto_map modules source_relation target_relation ) );
 
+__PACKAGE__->meta->make_immutable;
+no Moose;
+
 sub _register_applyto_map_entry {
   my ( $self, $applyto, $prereqs ) = @_;
   my ( $phase, $rel );
@@ -267,18 +270,13 @@ sub register_prereqs {
   return $prereqs;
 }
 
+1;
+
 =begin Pod::Coverage
 
 mvp_aliases mvp_multivalue_args register_prereqs
 
 =end Pod::Coverage
-
-=cut
-
-__PACKAGE__->meta->make_immutable;
-no Moose;
-
-1;
 
 =head1 SYNOPSIS
 
