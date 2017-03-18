@@ -18,7 +18,6 @@ my %WriteMakefileArgs = (
   "NAME" => "Dist::Zilla::Plugin::Prereqs::Recommend::MatchInstalled",
   "PREREQ_PM" => {
     "Dist::Zilla::Role::PrereqSource" => 0,
-    "Dist::Zilla::Util::ConfigDumper" => 0,
     "Module::Data" => 0,
     "Moose" => 0,
     "MooseX::Types::Moose" => 0,
@@ -43,7 +42,6 @@ my %WriteMakefileArgs = (
 
 my %FallbackPrereqs = (
   "Dist::Zilla::Role::PrereqSource" => 0,
-  "Dist::Zilla::Util::ConfigDumper" => 0,
   "Dist::Zilla::Util::Test::KENTNL" => "1.003002",
   "ExtUtils::MakeMaker" => 0,
   "File::Spec" => 0,
