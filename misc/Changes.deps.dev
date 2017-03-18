@@ -1,9 +1,15 @@
 This file contains changes to DEVELOPMENT dependencies only ( both REQUIRED and OPTIONAL )
 
 0.003003
+ [Added / develop requires]
+ - Dist::Zilla::Plugin::lib
+
  [Changed / develop suggests]
  - Dist::Zilla::App::Command::bakeini 0.002005 → 0.002006
  - Dist::Zilla::PluginBundle::Author::KENTNL 2.025020 → 2.025021
+
+ [Removed / develop requires]
+ - Dist::Zilla::Plugin::Bootstrap::lib
 
 0.003002 2017-03-04T00:30:27Z
  [Added / develop recommends]
