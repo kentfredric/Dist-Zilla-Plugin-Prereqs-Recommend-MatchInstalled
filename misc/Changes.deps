@@ -14,6 +14,9 @@ This file contains changes in REQUIRED dependencies for standard CPAN phases (co
  - Dist::Zilla::Util::ConfigDumper
  - utf8
 
+ [Removed / test requires]
+ - Dist::Zilla::Util::Test::KENTNL 1.003002
+
 0.003002 2017-03-04T00:30:27Z
  [Added / configure requires]
  - perl 5.008
