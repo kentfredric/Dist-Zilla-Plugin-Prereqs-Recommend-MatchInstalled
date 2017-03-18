@@ -129,7 +129,7 @@
    "provides" : {
       "Dist::Zilla::Plugin::Prereqs::Recommend::MatchInstalled" : {
          "file" : "lib/Dist/Zilla/Plugin/Prereqs/Recommend/MatchInstalled.pm",
-         "version" : "0.003003"
+         "version" : "0.003004"
       }
    },
    "release_status" : "stable",
@@ -144,7 +144,7 @@
          "web" : "https://github.com/kentnl/Dist-Zilla-Plugin-Prereqs-Recommend-MatchInstalled"
       }
    },
-   "version" : "0.003003",
+   "version" : "0.003004",
    "x_BuiltWith" : {
       "external_file" : "misc/built_with.json"
    },
@@ -660,7 +660,7 @@
                   "branch" : null,
                   "changelog" : "Changes",
                   "signed" : 0,
-                  "tag" : "0.003003-source",
+                  "tag" : "0.003004-source",
                   "tag_format" : "%v-source",
                   "tag_message" : "v%v"
                },
@@ -754,7 +754,7 @@
                   "branch" : "releases",
                   "changelog" : "Changes",
                   "signed" : 0,
-                  "tag" : "0.003003",
+                  "tag" : "0.003004",
                   "tag_format" : "%v",
                   "tag_message" : "v%v"
                },
@@ -818,7 +818,7 @@
                }
             },
             "name" : "@Author::KENTNL/always_latest_develop_bundle",
-            "version" : "0.003003"
+            "version" : "0.003004"
          },
          {
             "class" : "Dist::Zilla::Plugin::RemovePrereqs::Provided",
