@@ -4,7 +4,7 @@ use warnings;
 
 package Dist::Zilla::Plugin::Prereqs::Recommend::MatchInstalled;
 
-our $VERSION = '0.003003';
+our $VERSION = '0.003004';
 
 # ABSTRACT: Advertise versions of things you have as soft dependencies
 
